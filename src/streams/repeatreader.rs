@@ -67,6 +67,19 @@ impl RepeatReader<Cursor<&str>> {
     }
 }
 
+impl<S> RepeatReader<S>
+where
+    S: Seek,
+{
+    /// Seeks the content buffer to `0` from start and sets
+    /// the `read` state to `0`.
+    pub fn reset(&mut self) -> Result<()> {
+        self.contents.seek(SeekFrom::Start(0))?;
+        self.read = 0;
+        Ok(())
+    }
+}
+
 impl<S> Read for RepeatReader<S>
 where
     S: Read + Seek,
